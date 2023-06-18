@@ -6,7 +6,7 @@ import { getCurrentState } from './state';
 
 const Constants = require('../shared/constants');
 
-const { PLAYER_RADIUS, PLAYER_MAX_HP, BULLET_RADIUS, MAP_SIZE } = Constants;
+const { PLAYER_RADIUS, PLAYER_MAX_HP, BULLET_RADIUS, ASTEROID_RADIUS, MAP_SIZE } = Constants;
 
 // Get the canvas graphics context
 const canvas = document.getElementById('game-canvas');
@@ -26,7 +26,7 @@ window.addEventListener('resize', debounce(40, setCanvasDimensions));
 let animationFrameRequestId;
 
 function render() {
-  const { me, others, bullets } = getCurrentState();
+  const { me, others, bullets, asteroids } = getCurrentState();
   if (me) {
     // Draw background
     renderBackground(me.x, me.y);
@@ -38,6 +38,9 @@ function render() {
 
     // Draw all bullets
     bullets.forEach(renderBullet.bind(null, me));
+
+    // Draw all bullets
+    asteroids.forEach(renderAsteroid.bind(null, me));
 
     // Draw all players
     renderPlayer(me, me);
@@ -110,6 +113,26 @@ function renderBullet(me, bullet) {
     BULLET_RADIUS * 2,
     BULLET_RADIUS * 2,
   );
+}
+
+// Renders a ship at the given coordinates
+function renderAsteroid(me, asteroid) {
+  const { x, y, direction } = asteroid;
+  const canvasX = canvas.width / 2 + x - me.x;
+  const canvasY = canvas.height / 2 + y - me.y;
+
+  // Draw asteroid
+  context.save();
+  context.translate(canvasX, canvasY);
+  context.rotate(direction);
+  context.drawImage(
+    getAsset('asteroid_a.svg'),
+    -ASTEROID_RADIUS,
+    -ASTEROID_RADIUS,
+    ASTEROID_RADIUS * 2,
+    ASTEROID_RADIUS * 2,
+  );
+  context.restore();
 }
 
 function renderMainMenu() {

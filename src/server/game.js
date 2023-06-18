@@ -1,5 +1,6 @@
 const Constants = require('../shared/constants');
 const Player = require('./player');
+const Asteroid = require('./asteroid');
 const applyCollisions = require('./collisions');
 
 class Game {
@@ -7,8 +8,17 @@ class Game {
     this.sockets = {};
     this.players = {};
     this.bullets = [];
+    this.asteroids = [];
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
+
+    for(let i = 0;i < Constants.ASTEROID_COUNT;++i) {
+      const x = Constants.MAP_SIZE * Math.random();
+      const y = Constants.MAP_SIZE * Math.random();
+
+      this.asteroids.push(new Asteroid(x, y))
+    }
+
     setInterval(this.update.bind(this), 1000 / 60);
   }
 
@@ -47,6 +57,13 @@ class Game {
       }
     });
     this.bullets = this.bullets.filter(bullet => !bulletsToRemove.includes(bullet));
+
+    // Update each asteroid
+    this.asteroids.forEach(asteroid => {
+      if (asteroid.update(dt)) {
+        // TODO: Do something if update returns TRUE
+      }
+    });
 
     // Update each player
     Object.keys(this.sockets).forEach(playerID => {
@@ -104,12 +121,16 @@ class Game {
     const nearbyBullets = this.bullets.filter(
       b => b.distanceTo(player) <= Constants.MAP_SIZE / 2,
     );
+    const nearbyAsteroids = this.asteroids.filter(
+      b => b.distanceTo(player) <= Constants.MAP_SIZE / 2,
+    );
 
     return {
       t: Date.now(),
       me: player.serializeForUpdate(),
       others: nearbyPlayers.map(p => p.serializeForUpdate()),
       bullets: nearbyBullets.map(b => b.serializeForUpdate()),
+      asteroids: nearbyAsteroids.map(b => b.serializeForUpdate()),
       leaderboard,
     };
   }
