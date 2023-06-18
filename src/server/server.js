@@ -34,6 +34,8 @@ io.on('connection', socket => {
 
   socket.on(Constants.MSG_TYPES.JOIN_GAME, joinGame);
   socket.on(Constants.MSG_TYPES.INPUT, handleInput);
+  socket.on(Constants.MSG_TYPES.FORWARD, handleGoForward);
+  socket.on(Constants.MSG_TYPES.BACKWARD, handleGoBackward);
   socket.on('disconnect', onDisconnect);
 });
 
@@ -50,4 +52,16 @@ function handleInput(dir) {
 
 function onDisconnect() {
   game.removePlayer(this);
+}
+
+function handleGoStationary(){
+  game.handleGoStationary(this);
+}
+
+function handleGoForward(){
+  game.handleGoForward(this);
+}
+
+function handleGoBackward(){
+  game.handleGoBackward(this);
 }

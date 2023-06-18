@@ -1,6 +1,6 @@
 // Learn more about this file at:
 // https://victorzhou.com/blog/build-an-io-game-part-1/#6-client-input-%EF%B8%8F
-import { updateDirection } from './networking';
+import { updateDirection, goForward, goBackward } from './networking';
 
 function onMouseInput(e) {
   handleInput(e.clientX, e.clientY);
@@ -16,11 +16,23 @@ function handleInput(x, y) {
   updateDirection(dir);
 }
 
+function handleKeyboardInput (e) {
+  if (e.keyCode == 87){
+    goForward();
+  } else if (e.keyCode == 83){
+    goBackward();
+  } else if (e.keyCode == 32){
+    goStationary();
+  }
+}
+
+
 export function startCapturingInput() {
   window.addEventListener('mousemove', onMouseInput);
   window.addEventListener('click', onMouseInput);
   window.addEventListener('touchstart', onTouchInput);
   window.addEventListener('touchmove', onTouchInput);
+  window.addEventListener('keydown', handleKeyboardInput);
 }
 
 export function stopCapturingInput() {
@@ -28,4 +40,5 @@ export function stopCapturingInput() {
   window.removeEventListener('click', onMouseInput);
   window.removeEventListener('touchstart', onTouchInput);
   window.removeEventListener('touchmove', onTouchInput);
+  window.removeEventListener('keydown', handleKeyboardInput);
 }

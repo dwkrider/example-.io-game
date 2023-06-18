@@ -40,6 +40,18 @@ class Player extends ObjectClass {
     this.score += Constants.SCORE_BULLET_HIT;
   }
 
+  handleGoForward() {
+
+  }
+
+  handleGoBackward() {
+
+  }
+
+  handleGoStationary() {
+
+  }
+
   serializeForUpdate() {
     return {
       ...(super.serializeForUpdate()),
