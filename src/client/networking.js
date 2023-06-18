@@ -37,3 +37,15 @@ export const play = username => {
 export const updateDirection = throttle(20, dir => {
   socket.emit(Constants.MSG_TYPES.INPUT, dir);
 });
+
+export const goForward = throttle(20, dir => {
+  socket.emit(Constants.MSG_TYPES.FORWARD, dir);
+});
+
+export const goBackward = throttle(20, dir => {
+  socket.emit(Constants.MSG_TYPES.BACKWARD, dir);
+});
+
+export const goStationary = throttle(20, dir => {
+  socket.emit(Constants.MSG_TYPES.STATIONARY, dir);
+});

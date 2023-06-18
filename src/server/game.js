@@ -32,6 +32,24 @@ class Game {
     }
   }
 
+  handleGoForward(socket){
+    if (this.players[socket.id]) {
+      this.players[socket.id].setGoForward();
+    }
+  }
+
+  setGoStationary(socket){
+    if (this.players[socket.id]) {
+      this.players[socket.id].setGoStationary();
+    }
+  }
+
+  handleGoBackward(socket){
+    if (this.players[socket.id]) {
+      this.players[socket.id].setGoBackward();
+    }
+  }
+
   update() {
     // Calculate time elapsed
     const now = Date.now();
